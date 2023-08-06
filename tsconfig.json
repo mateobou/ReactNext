@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "paths": {
+      "path": [
+        "./node_modules/path-browserify"
+      ]
+    },
     "target": "es5",
     "lib": [
       "dom",

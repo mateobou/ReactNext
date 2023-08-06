@@ -6,7 +6,7 @@ import { SxProps } from "@mui/material";
 import { styled } from "styled-components";
 import styles from "./style";
 import { Box } from "@mui/system";
-import dotenv from 'dotenv';
+
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
     sx?: SxProps;
   }
@@ -24,31 +24,71 @@ interface MarquesProps{
     data:Array<any>,
 }
 const Marques: React.FC<MarquesProps> = ({title, data}) => {
-    const baseId = process.env.BASEID;
-    const apiKey = process.env.APIKEY
-    const tableName = process.env.TABLENAME;
     const [marques, updateMarques]= useState<any[]>([])
     const [categorie, setCategorie]= useState("Tout")
     const [SousCategorie, setSousCategorie]= useState([])
     const [sousFiltreData, setSousFiltresData] = useState<any[]>([]);
     const [SortedsousFiltreData, setSortedSousFiltresData] = useState<any[]>([]);
     const [SortedsousFiltreMarques, setSortedSousFiltresMarques] = useState<any[]>([]);//
-    useEffect(()=>{
-        fetch(`https://api.airtable.com/v0/${baseId}/${tableName}`, {
-          headers: { Authorization: `Bearer ${apiKey}` },
-          method: 'GET',
-        })
-          .then((response) => {
-            return response.json()
-          })
-          .then((json) => {
-            setSousFiltresData(json.records)
-          })
-          .catch((error) => console.error(error));
-      },[])
-    useEffect(()=>{
-        updateMarques([...data])
-    },[data])
+    const baseId = process.env.REACT_APP_BASEID;
+    const apiKey = process.env.REACT_APP_APIKEY;
+    const tableName = process.env.REACT_APP_TABLENAME;
+    const jsonServerUrl = "http://localhost:8080/marque";
+    useEffect(() => {
+        async function fetchData() {
+          if (!baseId || !apiKey || !tableName) {
+            console.log('Variables d\'environnement non définies, utilisation des données de JSON Server...');
+            try {
+              const response = await fetch(jsonServerUrl);
+    
+              if (!response.ok) {
+                throw new Error(`Erreur réseau avec le statut ${response.status}`);
+              }
+    
+              const json = await response.json();
+              setSousFiltresData(json);
+            } catch (error) {
+              console.error('Erreur lors de la récupération des données de JSON Server.', error);
+            }
+            return;
+          }
+    
+          try {
+            const response = await fetch(`https://api.airtable.com/v0/${baseId}/${tableName}`, {
+              headers: { Authorization: `Bearer ${apiKey}` },
+              method: 'GET',
+            });
+    
+            if (!response.ok) {
+              throw new Error(`Erreur réseau avec le statut ${response.status}`);
+            }
+    
+            const json = await response.json();
+            setSousFiltresData(json.records);
+          } catch (error) {
+            console.error('Erreur lors de la récupération des données de l\'API, tentative avec JSON Server...', error);
+            
+            try {
+              const response = await fetch(jsonServerUrl);
+    
+              if (!response.ok) {
+                throw new Error(`Erreur réseau avec le statut ${response.status}`);
+              }
+    
+              const json = await response.json();
+              setSousFiltresData(json);
+            } catch (error) {
+              console.error('Erreur lors de la récupération des données de JSON Server.', error);
+            }
+          }
+        }
+    
+        fetchData();
+      }, []);
+    
+      useEffect(() => {
+        updateMarques([...data]);
+      }, [data]);
     useEffect(()=>{
         setSortedSousFiltresMarques([])
         let SortedsousFiltreMarques:String[] = [];

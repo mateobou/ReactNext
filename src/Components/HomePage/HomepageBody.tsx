@@ -33,9 +33,9 @@ const Image = styled('img')<DivProps>(({ theme, sx }) => ({
 dotenv.config();
 const HomepageBody: React.FC = () => {
     const [data, setData] = useState([]);
-    const baseId = process.env.BASEID;
-    const apiKey = process.env.APIKEY
-    const tableName =process.env.TABLENAME ;
+    const baseId = process.env.REACT_APP_BASEID;
+    const apiKey = process.env.REACT_API_KEY
+    const tableName =process.env.REACT_APP_TABLENAME ;
     const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
     
     useEffect(()=>{
