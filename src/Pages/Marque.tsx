@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react"
-import dotenv from 'dotenv';
-dotenv.config();
 const MarquePage: React.FC = () => {
     const [Marque, setMarque] = useState<Marque>();
     const queryParameters = new URLSearchParams(window.location.search)

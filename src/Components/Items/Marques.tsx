@@ -30,10 +30,10 @@ const Marques: React.FC<MarquesProps> = ({title, data}) => {
     const [sousFiltreData, setSousFiltresData] = useState<any[]>([]);
     const [SortedsousFiltreData, setSortedSousFiltresData] = useState<any[]>([]);
     const [SortedsousFiltreMarques, setSortedSousFiltresMarques] = useState<any[]>([]);//
-    const baseId = process.env.REACT_APP_BASEID;
-    const apiKey = process.env.REACT_APP_APIKEY;
-    const tableName = process.env.REACT_APP_TABLENAME;
-    const jsonServerUrl = "http://localhost:8080/marque";
+    const baseId = undefined //process.env.REACT_APP_BASEID;
+    const apiKey = undefined//process.env.REACT_APP_APIKEY;
+    const tableName = undefined//process.env.REACT_APP_TABLENAME;
+    const jsonServerUrl = "http://localhost:8080/marques";
     useEffect(() => {
         async function fetchData() {
           if (!baseId || !apiKey || !tableName) {
@@ -53,7 +53,7 @@ const Marques: React.FC<MarquesProps> = ({title, data}) => {
             return;
           }
     
-          try {
+          /*try {
             const response = await fetch(`https://api.airtable.com/v0/${baseId}/${tableName}`, {
               headers: { Authorization: `Bearer ${apiKey}` },
               method: 'GET',
@@ -67,7 +67,7 @@ const Marques: React.FC<MarquesProps> = ({title, data}) => {
             setSousFiltresData(json.records);
           } catch (error) {
             console.error('Erreur lors de la récupération des données de l\'API, tentative avec JSON Server...', error);
-            
+            */
             try {
               const response = await fetch(jsonServerUrl);
     
@@ -81,7 +81,7 @@ const Marques: React.FC<MarquesProps> = ({title, data}) => {
               console.error('Erreur lors de la récupération des données de JSON Server.', error);
             }
           }
-        }
+        //}
     
         fetchData();
       }, []);

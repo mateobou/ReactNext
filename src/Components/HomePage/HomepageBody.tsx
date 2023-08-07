@@ -4,7 +4,6 @@ import Marques from "../Items/Marques";
 import Tirelire from './../../assets/Économie.png'
 import styles from "./styles";
 import styled from '@mui/styled-engine/index';
-import dotenv from 'dotenv';
 
 import { SxProps } from '@mui/system';
 interface DivProps {
@@ -30,7 +29,6 @@ const Image = styled('img')<DivProps>(({ theme, sx }) => ({
   ...sx,  // Appliquer les styles supplémentaires fournis par la prop sx
 }));
 
-dotenv.config();
 const HomepageBody: React.FC = () => {
     const [data, setData] = useState([]);
     const baseId = process.env.REACT_APP_BASEID;
